@@ -7,11 +7,14 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] PlayerMovement playerMovement;
+    public PlayerMovement playerMovement;
 
+    public PlayerInput playerInput = new();
     public RigWeightAnimator rigWeightAnimator = new();
     public bool logCurrentState;
     public IdleState idleState = new();
+    public IdleCrouchState idleCrouchState = new(); 
+    public MoveCrouchState moveCrouchState = new();
     public MoveState moveState = new();
     public StateMachine sm = new();
     private void Start()
@@ -21,13 +24,15 @@ public class Player : MonoBehaviour
         APlayerState[] states = new APlayerState[]
         {
             idleState,
-            moveState
+            idleCrouchState,
+            moveState, 
+            moveCrouchState
         };
 
         foreach (var state in states)
         {
             state.SetStateMachine(sm);
-            state.Init(rigWeightAnimator, playerMovement);
+            state.Init(rigWeightAnimator, playerMovement, playerInput);
         }
 
 
@@ -37,11 +42,14 @@ public class Player : MonoBehaviour
         }
         sm.AddState(idleState);
         sm.AddState(moveState);
+        sm.AddState(idleCrouchState);
+        sm.AddState(moveCrouchState);
 
         sm.SetState<IdleState>();
     }
     private void Update()
     {
+        playerInput.Update();
         sm.Update();
     }
 }

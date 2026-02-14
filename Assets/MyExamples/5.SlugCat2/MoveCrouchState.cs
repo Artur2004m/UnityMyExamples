@@ -1,29 +1,25 @@
 using MyExamples.StateMachine;
-using MyExamples.Movement;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 namespace MyExamples.SlugCat2
-{
-    [Serializable]
-    public class IdleState : APlayerState
+{ 
+    public class MoveCrouchState : APlayerState
     {
         public AnimationCurve rigWeightCurveEnterState;
         public float rigWeightCurveSpeedEnterState = 1f;
         public AnimationCurve rigWeightCurveExitState;
         public float rigWeightCurveSpeedExitState = 1f;
+
         public override void Enter(EnterStateArgs enterArgs)
         {
-            playerMovement.rotateTowardsCamera = false;
-            rigWeightAnimator.Animate("IdleRig", rigWeightCurveEnterState, rigWeightCurveSpeedEnterState);
-
+            playerMovement.rotateTowardsCamera = true;
+            rigWeightAnimator.Animate("MoveCrouchRig", rigWeightCurveEnterState, rigWeightCurveSpeedEnterState);
         }
         public override void Exit(ExitStateArgs exitArgs)
         {
-            rigWeightAnimator.Animate("IdleRig", rigWeightCurveExitState, rigWeightCurveSpeedExitState);
+            rigWeightAnimator.Animate("MoveCrouchRig", rigWeightCurveExitState, rigWeightCurveSpeedExitState);
         }
         public override void Update()
         {
@@ -31,21 +27,22 @@ namespace MyExamples.SlugCat2
             bool crouchHeld = playerInput.crouch_held;
             Vector3 moveInputVector = playerMovement.inputDirectionCached;
 
-            if (crouchDown )
+            if (crouchDown)
             {
-                if (moveInputVector == Vector3.zero )
+                if (moveInputVector == Vector3.zero)
                 {
-                    sm.SetState<IdleCrouchState>();
+                    sm.SetState<IdleState>();
                 }
                 else
                 {
-                    sm.SetState<MoveCrouchState>();
+                    sm.SetState<MoveState>();
                 }
             }
 
-            if (moveInputVector != Vector3.zero)
+            if (moveInputVector == Vector3.zero)
             {
-                sm.SetState<MoveState>();
+                if (crouchHeld) return;
+                sm.SetState<IdleCrouchState>();
             }
         }
     }

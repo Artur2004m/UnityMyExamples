@@ -11,10 +11,12 @@ namespace MyExamples.SlugCat2
     {
         protected RigWeightAnimator rigWeightAnimator;
         protected PlayerMovement playerMovement;
-        public void Init(RigWeightAnimator rigWeightAnimator, PlayerMovement playerMovement)
+        protected PlayerInput playerInput;
+        public void Init(RigWeightAnimator rigWeightAnimator, PlayerMovement playerMovement, PlayerInput playerInput)
         {
             this.rigWeightAnimator = rigWeightAnimator;
             this.playerMovement = playerMovement;
+            this.playerInput = playerInput; 
         }
     }
 }
