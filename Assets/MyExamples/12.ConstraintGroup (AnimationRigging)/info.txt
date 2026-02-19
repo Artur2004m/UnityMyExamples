@@ -1,0 +1,1 @@
+Set constraints as childs of ConstraintGroup gameobject and press FindInChilds button. Then u can control group of constraints with a single slider (in Runtime)
